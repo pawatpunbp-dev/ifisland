@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IF Island – เกมฝึก If-Clause</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Sarabun","Prompt","Noto Sans Thai","Leelawadee UI",Tahoma,sans-serif;background:linear-gradient(180deg,#bfe9ff 0%,#e0f7ff 35%,#fff7d6 100%);min-height:100vh;color:#1e293b;font-size:18px;line-height:1.5;padding-bottom:40px}
+#app{max-width:760px;margin:0 auto;padding:14px}
+button{font-family:inherit;font-size:1rem;cursor:pointer;border:none}
+.hero{text-align:center;padding:18px 10px 8px}
+.hero .isl{font-size:64px;line-height:1.1;animation:bob 3s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.hero h1{font-size:2rem;color:#0c4a6e}
+.hero p{color:#075985}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:#fff;border-radius:18px;padding:12px 14px;margin:12px 0;box-shadow:0 4px 0 #bae6fd}
+.bar input{flex:1;min-width:150px;font:inherit;padding:8px 12px;border:2px solid #bae6fd;border-radius:12px}
+.pill{background:#fef3c7;border-radius:999px;padding:6px 14px;font-weight:700;color:#92400e;white-space:nowrap}
+.card{background:#fff;border-radius:22px;padding:16px;margin:14px 0;box-shadow:0 6px 0 rgba(0,0,0,.08);border-left:10px solid var(--c)}
+.card h2{color:var(--c);font-size:1.4rem;display:flex;align-items:center;gap:8px}
+.card .sub{color:#475569;margin-bottom:10px}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn{background:var(--c,#0ea5e9);color:#fff;border-radius:14px;padding:10px 14px;font-weight:700;box-shadow:0 4px 0 rgba(0,0,0,.2);flex:1;min-width:130px}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.2)}
+.btn.lt{background:var(--bg,#e0f2fe);color:var(--c,#0369a1)}
+.btn small{display:block;font-weight:400;font-size:.85rem}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:10px}
+.back{background:#fff;border-radius:12px;padding:8px 14px;font-weight:700;color:#0369a1;box-shadow:0 3px 0 #bae6fd}
+.prog{height:14px;background:#fff;border-radius:99px;overflow:hidden;margin-bottom:12px}
+.prog i{display:block;height:100%;background:var(--c);border-radius:99px;transition:width .3s}
+.panel{background:#fff;border-radius:22px;padding:18px;box-shadow:0 6px 0 rgba(0,0,0,.08)}
+.pic{display:flex;align-items:center;justify-content:center;gap:14px;background:linear-gradient(135deg,var(--bg),#fff);border:3px dashed var(--c);border-radius:20px;padding:16px 8px;margin:10px 0;font-size:46px;flex-wrap:wrap}
+.pic .box{background:#fff;border-radius:16px;padding:6px 14px;box-shadow:0 3px 0 rgba(0,0,0,.1);text-align:center}
+.pic .box small{display:block;font-size:.8rem;color:#64748b;font-weight:700}
+.pic .ar{font-size:30px;color:var(--c)}
+.sent{font-size:1.5rem;font-weight:700;line-height:2;text-align:center;margin:8px 0}
+.w{display:inline-block;padding:0 6px;border-radius:8px;background:#f1f5f9;border-bottom:3px solid #cbd5e1;cursor:pointer;margin:2px 0}
+.w:hover,.w:active{background:#fde68a;border-color:#f59e0b}
+.hl .w{background:#bbf7d0;border-color:#22c55e}
+.blank{display:inline-block;min-width:90px;border-bottom:4px solid var(--c);color:var(--c);margin:0 4px}
+.thai{text-align:center;color:#475569;margin-bottom:8px}
+.say{background:#e0f2fe;color:#0369a1;border-radius:99px;padding:6px 14px;font-weight:700;margin:3px}
+.center{text-align:center}
+.q{font-weight:700;color:var(--c);text-align:center;font-size:1.1rem}
+.opt{display:flex;gap:8px;margin:10px 0}
+.opt .o{flex:1;background:#fff;border:3px solid var(--c);color:#0f172a;border-radius:16px;padding:12px;font-size:1.25rem;font-weight:700;box-shadow:0 4px 0 var(--c)}
+.opt .o:active{transform:translateY(3px);box-shadow:none}
+.opt .o.ok{background:#bbf7d0;border-color:#16a34a;box-shadow:0 4px 0 #16a34a}
+.opt .o.no{background:#fecaca;border-color:#dc2626;box-shadow:0 4px 0 #dc2626}
+.opt .h{width:56px;background:#e0f2fe;border-radius:16px;font-size:1.4rem}
+.fb{border-radius:18px;padding:14px;margin-top:12px;text-align:center}
+.fb.good{background:#dcfce7}.fb.bad{background:#fee2e2}
+.fb h3{font-size:1.3rem}
+.tip{background:#fffbeb;border:2px solid #fde68a;border-radius:12px;padding:8px;margin:8px 0;font-size:.95rem}
+.formula{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;margin:12px 0;font-weight:700;font-size:1.15rem}
+.chip{background:var(--c);color:#fff;border-radius:10px;padding:6px 12px}
+.chip.b{background:#fff;color:var(--c);border:3px solid var(--c)}
+.comma{font-size:1.6rem;color:#64748b}
+.note{background:var(--bg);border-radius:14px;padding:10px 14px;margin:10px 0}
+table{width:100%;border-collapse:collapse;font-size:.95rem}
+td,th{padding:8px 6px;border-bottom:1px solid #e2e8f0;text-align:left;vertical-align:top}
+.stars{font-size:1.1rem;letter-spacing:2px}
+.big{font-size:64px;text-align:center}
+#sheet{position:fixed;left:0;right:0;bottom:0;background:#fff;border-radius:22px 22px 0 0;box-shadow:0 -6px 24px rgba(0,0,0,.25);padding:14px 16px 18px;transform:translateY(110%);transition:transform .25s;z-index:20;max-height:70vh;overflow:auto}
+#sheet.on{transform:none}
+#sheet .in{max-width:720px;margin:0 auto}
+.row{border-bottom:1px dashed #cbd5e1;padding:8px 0}
+.row:last-child{border:none}
+.row .en{font-size:1.7rem;font-weight:800;color:#0369a1}
+.row b{color:#be123c}
+.x{float:right;background:#f1f5f9;border-radius:99px;width:38px;height:38px;font-size:1.1rem}
+.conf{position:fixed;top:-40px;font-size:28px;animation:fall 2.4s linear forwards;z-index:30;pointer-events:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+.foot{text-align:center;color:#64748b;font-size:.9rem;margin-top:14px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="sheet"><div class="in" id="sheetIn"></div></div>
+<script>
+/*DATA*/
+var TYPES=[
+ {n:'Type 0',th:'เรื่องจริงเสมอ',em:'🔬',c:'#15803d',bg:'#dcfce7',
+  desc:'ใช้พูดถึงสิ่งที่เป็นจริงทุกครั้ง เช่น ธรรมชาติ วิทยาศาสตร์ ทำแบบนี้ทีไร ผลก็เป็นแบบนี้ทุกที',
+  f1:['If','V1'],f2:['V1'],key:'จำง่าย ๆ : ใช้ V1 ทั้งสองฝั่ง (ถ้าประธานคนเดียว เช่น he she it ให้เติม s)',
+  ex:[{s:'If you mix red and white, you get pink.',th:['ถ้าคุณผสมสีแดงกับสีขาว','คุณจะได้สีชมพู'],em:['🔴⚪','🩷']},
+      {s:'If you freeze water, it becomes ice.',th:['ถ้าคุณแช่แข็งน้ำ','มันกลายเป็นน้ำแข็ง'],em:['💧❄️','🧊']}]},
+ {n:'Type 1',th:'อาจเกิดขึ้นจริงในอนาคต',em:'🌤️',c:'#1d4ed8',bg:'#dbeafe',
+  desc:'ใช้พูดถึงสิ่งที่อาจเกิดขึ้นจริงในอนาคต ถ้าทำสิ่งนี้ ก็ "จะ" เกิดสิ่งนั้น',
+  f1:['If','V1'],f2:['will','V1'],key:'จำง่าย ๆ : ฝั่ง If ใช้ V1 ส่วนอีกฝั่งมี will (จะ) ห้ามใส่ will หลัง If',
+  ex:[{s:'If they win the game, they will be happy.',th:['ถ้าพวกเขาชนะเกม','พวกเขาจะมีความสุข'],em:['⚽🏆','😄']},
+      {s:'If you eat too much, you will feel sick.',th:['ถ้าคุณกินมากเกินไป','คุณจะรู้สึกไม่สบาย'],em:['🍔🍟🍕','🤢']}]},
+ {n:'Type 2',th:'สมมติ ไม่จริงในตอนนี้',em:'💭',c:'#7e22ce',bg:'#f3e8ff',
+  desc:'ใช้พูดเรื่องสมมติหรือฝัน ซึ่งตอนนี้ไม่เป็นความจริง เช่น ถ้าฉันมีปีก (แต่จริง ๆ ไม่มี)',
+  f1:['If','V2'],f2:['would','V1'],key:'จำง่าย ๆ : ฝั่ง If ใช้ V2 ส่วนอีกฝั่งมี would และใช้ were กับทุกประธาน (If I were...)',
+  ex:[{s:'If I had a million baht, I would travel around the world.',th:['ถ้าฉันมีเงินหนึ่งล้านบาท (แต่ไม่มี)','ฉันจะเที่ยวรอบโลก'],em:['💰','🌍✈️']},
+      {s:'If he knew the answer, he would tell you.',th:['ถ้าเขารู้คำตอบ (แต่เขาไม่รู้)','เขาจะบอกคุณ'],em:['🤔💡','🗣️']}]},
+ {n:'Type 3',th:'เสียดายอดีต แก้ไขไม่ได้แล้ว',em:'⏪',c:'#c2410c',bg:'#ffedd5',
+  desc:'ใช้พูดถึงอดีตที่ผ่านไปแล้วและแก้ไขไม่ได้ เป็นการคิดย้อนหลังว่า "ถ้าตอนนั้น... ก็คง..."',
+  f1:['If','had','V3'],f2:['would have','V3'],key:'จำง่าย ๆ : ฝั่ง If ใช้ had + V3 ส่วนอีกฝั่งใช้ would have + V3',
+  ex:[{s:'If he had run fast, he would have won the race.',th:['ถ้าตอนนั้นเขาวิ่งเร็ว','เขาคงชนะการแข่งขันไปแล้ว'],em:['🏃💨','🥇']},
+      {s:'If we had left early, we would have arrived on time.',th:['ถ้าตอนนั้นพวกเราออกเดินทางเร็ว','พวกเราคงมาถึงตรงเวลา'],em:['🚗🌅','⏰✅']}]}
+];
+/* s = ประโยค ([คำตอบ]), x = ตัวเลือกผิด, m = ตัวลวงเกมจับคู่ (ลำดับประโยคใน Type เดียวกัน) */
+var Q=[
+[{s:'If you heat ice, it [melts].',x:['melted','melting'],th:['ถ้าคุณทำให้น้ำแข็งร้อน','มันละลาย'],em:['🧊🔥','💧'],m:[2,4]},
+ {s:'If it [rains], the grass gets wet.',x:['rained','raining'],th:['ถ้าฝนตก','หญ้าก็เปียก'],em:['🌧️','🌱💦'],m:[2,3]},
+ {s:'If babies are hungry, they [cry].',x:['cried','crying'],th:['ถ้าเด็กทารกหิว','พวกเขาร้องไห้'],em:['👶🍼','😭'],m:[0,4]},
+ {s:'If you touch fire, it [hurts].',x:['hurt','hurting'],th:['ถ้าคุณแตะไฟ','มันเจ็บ'],em:['✋🔥','😖'],m:[1,4]},
+ {s:'If the sun [sets], it gets dark.',x:['setting','had set'],th:['ถ้าดวงอาทิตย์ตก','ท้องฟ้าก็มืด'],em:['🌇','🌙'],m:[2,3]},
+ {s:'If you do not water a plant, it [dies].',x:['died','dying'],th:['ถ้าคุณไม่รดน้ำต้นไม้','มันตาย'],em:['🌱🚫💧','🥀'],m:[0,1]}],
+[{s:'If it rains tomorrow, I [will stay] at home.',x:['stayed','would stay'],th:['ถ้าพรุ่งนี้ฝนตก','ฉันจะอยู่บ้าน'],em:['🌧️📅','🏠😊'],m:[1,4]},
+ {s:'If you study hard, you [will pass] the exam.',x:['passed','would pass'],th:['ถ้าคุณตั้งใจเรียน','คุณจะสอบผ่าน'],em:['📚✍️','💯'],m:[3,4]},
+ {s:'If she [is] late, the teacher will be angry.',x:['was','will be'],th:['ถ้าเธอมาสาย','ครูจะโกรธ'],em:['👧⏰','👩‍🏫😠'],m:[1,4]},
+ {s:'If we hurry, we [will catch] the bus.',x:['caught','would catch'],th:['ถ้าพวกเรารีบ','พวกเราจะขึ้นรถบัสทัน'],em:['🏃🏃','🚌'],m:[4,5]},
+ {s:'If I [have] money, I will buy a new phone.',x:['had','will have'],th:['ถ้าฉันมีเงิน','ฉันจะซื้อโทรศัพท์ใหม่'],em:['💵','📱'],m:[3,5]},
+ {s:'If he does not sleep, he [will be] tired.',x:['was','would be'],th:['ถ้าเขาไม่นอน','เขาจะเหนื่อย'],em:['👦🚫😴','🥱'],m:[1,3]}],
+[{s:'If I [had] wings, I would fly to school.',x:['have','will have'],th:['ถ้าฉันมีปีก (แต่จริง ๆ ไม่มี)','ฉันจะบินไปโรงเรียน'],em:['🧒🦅','🏫'],m:[1,3]},
+ {s:'If I were rich, I [would buy] a big house.',x:['will buy','buy'],th:['ถ้าฉันรวย (แต่จริง ๆ ไม่รวย)','ฉันจะซื้อบ้านหลังใหญ่'],em:['🤑','🏰'],m:[3,5]},
+ {s:'If she had a car, she [would drive] to work.',x:['will drive','drives'],th:['ถ้าเธอมีรถ (แต่จริง ๆ ไม่มี)','เธอจะขับรถไปทำงาน'],em:['👩🚗','🏢'],m:[0,4]},
+ {s:'If I [were] you, I would say sorry.',x:['am','will be'],th:['ถ้าฉันเป็นคุณ','ฉันจะพูดขอโทษ'],em:['👉🧑','🙏'],m:[4,2]},
+ {s:'If we lived on the moon, we [would jump] very high.',x:['will jump','jump'],th:['ถ้าพวกเราอยู่บนดวงจันทร์','พวกเราจะกระโดดได้สูงมาก'],em:['🌙','🤸'],m:[2,3]},
+ {s:'If I met a ghost, I [would run] away.',x:['will run','run'],th:['ถ้าฉันเจอผี','ฉันจะวิ่งหนี'],em:['👻','🏃💨'],m:[1,2]}],
+[{s:'If I [had studied] hard, I would have passed the exam.',x:['study','will study'],th:['ถ้าตอนนั้นฉันตั้งใจเรียน (แต่ไม่ได้เรียน)','ฉันคงสอบผ่านไปแล้ว'],em:['📚⏪','💯'],m:[4,1]},
+ {s:'If she had woken up early, she [would have caught] the bus.',x:['will catch','would catch'],th:['ถ้าตอนนั้นเธอตื่นเช้า','เธอคงขึ้นรถบัสทันไปแล้ว'],em:['⏰🌅','🚌'],m:[3,0]},
+ {s:'If you had told me, I [would have helped] you.',x:['will help','would help'],th:['ถ้าตอนนั้นคุณบอกฉัน','ฉันคงได้ช่วยคุณไปแล้ว'],em:['🗣️','🤝'],m:[1,3]},
+ {s:'If they [had played] well, they would have won the game.',x:['play','will play'],th:['ถ้าตอนนั้นพวกเขาเล่นดี','พวกเขาคงชนะเกมไปแล้ว'],em:['⚽','🏆'],m:[1,4]},
+ {s:'If I had seen you, I [would have said] hello.',x:['will say','would say'],th:['ถ้าตอนนั้นฉันเห็นคุณ','ฉันคงได้ทักทายไปแล้ว'],em:['👀','👋'],m:[0,1]},
+ {s:'If it had not rained, we [would have gone] to the beach.',x:['will go','would go'],th:['ถ้าตอนนั้นฝนไม่ตก','พวกเราคงได้ไปชายหาดแล้ว'],em:['🌧️❌','🏖️'],m:[0,2]}]
+];
+/* คำศัพท์: [คำอ่านไทย, คำแปล] */
+var D={
+'if':['อิฟ','ถ้า'],'you':['ยู','คุณ / เธอ'],'heat':['ฮีท','ทำให้ร้อน'],'ice':['ไอซ์','น้ำแข็ง'],'it':['อิท','มัน'],
+'melts':['เมลท์ส','ละลาย'],'melted':['เมล-ทิด','ละลายแล้ว (อดีต)'],'melting':['เมล-ทิง','กำลังละลาย'],
+'rains':['เรนส์','ฝนตก'],'rained':['เรนด์','ฝนตกแล้ว (อดีต)'],'raining':['เร-นิง','ฝนกำลังตก'],
+'the':['เดอะ','(คำนำหน้านาม) ...นั้น'],'grass':['กราส','หญ้า'],'gets':['เก็ทส์','กลายเป็น / ได้รับ'],'get':['เก็ท','ได้ / ได้รับ'],'wet':['เว็ท','เปียก'],
+'babies':['เบ-บีส์','เด็กทารก (หลายคน)'],'are':['อาร์','เป็น อยู่ คือ'],'hungry':['ฮัง-กรี','หิว'],'they':['เดย์','พวกเขา / พวกมัน'],
+'cry':['คราย','ร้องไห้'],'cried':['ครายด์','ร้องไห้แล้ว (อดีต)'],'crying':['คราย-อิง','กำลังร้องไห้'],
+'touch':['ทัช','แตะ / สัมผัส'],'fire':['ไฟ-เออร์','ไฟ'],'hurts':['เฮิร์ทส์','เจ็บ'],'hurt':['เฮิร์ท','เจ็บ'],'hurting':['เฮิร์-ทิง','กำลังเจ็บ'],
+'sun':['ซัน','ดวงอาทิตย์'],'sets':['เซ็ทส์','(ดวงอาทิตย์) ตก'],'setting':['เซ็ท-ทิง','กำลังตก'],'set':['เซ็ท','ตก / ตั้ง'],
+'had':['แฮด','มี (อดีตของ have) / กริยาช่วยใน Type 3'],'dark':['ดาร์ค','มืด'],'do':['ดู','ทำ / กริยาช่วย'],'does':['ดัซ','ทำ / กริยาช่วย (ใช้กับ he she it)'],'not':['น็อท','ไม่'],
+'water':['วอ-เทอร์','น้ำ / รดน้ำ'],'a':['อะ','หนึ่ง (คำนำหน้านาม)'],'plant':['แพลนท์','ต้นไม้ / พืช'],
+'dies':['ดายส์','ตาย'],'died':['ดายด์','ตายแล้ว (อดีต)'],'dying':['ดาย-อิง','กำลังจะตาย'],
+'tomorrow':['ทู-มอร์-โรว์','พรุ่งนี้'],'i':['ไอ','ฉัน'],'will':['วิล','จะ'],'stay':['สเตย์','อยู่ / พัก'],'stayed':['สเตย์ด','อยู่แล้ว (อดีต)'],
+'would':['วูด','จะ (ใช้กับเรื่องสมมติ)'],'at':['แอท','ที่'],'home':['โฮม','บ้าน'],'study':['สตัด-ดี','เรียน'],'hard':['ฮาร์ด','อย่างหนัก / ขยัน'],
+'pass':['พาส','สอบผ่าน'],'passed':['พาสท์','สอบผ่านแล้ว (ช่อง 2 และ 3)'],'exam':['อิก-แซม','การสอบ'],
+'she':['ชี','เธอ (ผู้หญิง)'],'is':['อิส','เป็น อยู่ คือ'],'was':['วอส','เป็น อยู่ คือ (อดีต)'],'be':['บี','เป็น อยู่ คือ'],'late':['เลท','สาย'],
+'teacher':['ที-เชอร์','ครู'],'angry':['แอง-กรี','โกรธ'],'we':['วี','พวกเรา'],'hurry':['เฮอ-รี','รีบ'],
+'catch':['แคช','ขึ้นทัน / จับ'],'caught':['คอท','ขึ้นทัน / จับ (ช่อง 2 และ 3)'],'bus':['บัส','รถบัส / รถเมล์'],
+'have':['แฮฟ','มี / กริยาช่วย'],'money':['มัน-นี','เงิน'],'buy':['บาย','ซื้อ'],'new':['นิว','ใหม่'],'phone':['โฟน','โทรศัพท์'],
+'he':['ฮี','เขา (ผู้ชาย)'],'sleep':['สลีพ','นอนหลับ'],'tired':['ไท-เออร์ด','เหนื่อย'],'were':['เวอร์','เป็น อยู่ คือ (อดีต / เรื่องสมมติ)'],
+'wings':['วิงส์','ปีก'],'fly':['ฟลาย','บิน'],'to':['ทู','ไปยัง / ไปที่'],'school':['สคูล','โรงเรียน'],'rich':['ริช','รวย'],'big':['บิก','ใหญ่'],'house':['เฮาส์','บ้าน'],
+'car':['คาร์','รถยนต์'],'drive':['ไดรฟ์','ขับรถ'],'drives':['ไดรฟ์ส','ขับรถ'],'work':['เวิร์ค','ที่ทำงาน / ทำงาน'],'am':['แอม','เป็น อยู่ คือ'],
+'say':['เซย์','พูด'],'sorry':['ซอ-รี','ขอโทษ'],'lived':['ลิฟด์','อาศัยอยู่ (อดีต)'],'on':['ออน','บน (on time = ตรงเวลา)'],'moon':['มูน','ดวงจันทร์'],
+'jump':['จัมพ์','กระโดด'],'very':['เว-รี','มาก'],'high':['ไฮ','สูง'],'met':['เม็ท','พบ / เจอ (อดีต)'],'ghost':['โกสท์','ผี'],'run':['รัน','วิ่ง'],'away':['อะ-เวย์','หนีไป / ออกไป'],
+'studied':['สตัด-ดีด','เรียนแล้ว (ช่อง 2 และ 3)'],'woken':['โว-เคิน','ตื่น (ช่อง 3)'],'up':['อัพ','ขึ้น'],'early':['เออร์-ลี','เช้า / เร็ว'],
+'told':['โทลด์','บอก (ช่อง 2 และ 3)'],'me':['มี','ฉัน'],'helped':['เฮลพ์ท','ช่วยแล้ว (ช่อง 2 และ 3)'],'help':['เฮลพ์','ช่วย'],
+'played':['เพลย์ด','เล่นแล้ว (ช่อง 2 และ 3)'],'play':['เพลย์','เล่น'],'well':['เวล','ดี / เก่ง'],'won':['วัน','ชนะ (ช่อง 2 และ 3)'],'game':['เกม','เกม / การแข่งขัน'],
+'seen':['ซีน','เห็น (ช่อง 3)'],'said':['เซด','พูด (ช่อง 2 และ 3)'],'hello':['เฮล-โล','สวัสดี'],'gone':['กอน','ไป (ช่อง 3)'],'go':['โก','ไป'],'beach':['บีช','ชายหาด'],
+'mix':['มิกซ์','ผสม'],'red':['เรด','สีแดง'],'and':['แอนด์','และ'],'white':['ไวท์','สีขาว'],'pink':['พิงค์','สีชมพู'],'freeze':['ฟรีซ','แช่แข็ง'],'becomes':['บี-คัมส์','กลายเป็น'],
+'win':['วิน','ชนะ'],'happy':['แฮป-ปี','มีความสุข'],'eat':['อีท','กิน'],'too':['ทู','เกินไป'],'much':['มัช','มาก'],'feel':['ฟีล','รู้สึก'],'sick':['ซิค','ป่วย / ไม่สบาย'],
+'million':['มิล-เลียน','หนึ่งล้าน'],'baht':['บาท','บาท (เงินไทย)'],'travel':['แทรฟ-เวิล','ท่องเที่ยว'],'around':['อะ-ราวด์','รอบ ๆ'],'world':['เวิร์ลด์','โลก'],
+'knew':['นิว','รู้ (อดีต)'],'answer':['แอน-เซอร์','คำตอบ'],'tell':['เทล','บอก'],'fast':['ฟาสท์','เร็ว'],'race':['เรซ','การแข่งขันวิ่ง'],
+'left':['เลฟท์','ออกเดินทาง (ช่อง 3)'],'arrived':['อะ-ไรฟด์','มาถึง'],'time':['ไทม์','เวลา'],'study':['สตัด-ดี','เรียน']
+};
+/*END*/
+
+var app=document.getElementById('app'),sheet=document.getElementById('sheet'),sheetIn=document.getElementById('sheetIn');
+var KEY='if_island_v1',S={name:'',best:{}};
+try{var sv=JSON.parse(localStorage.getItem(KEY));if(sv&&sv.best)S=sv;}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+function clean(t){return t.toLowerCase().replace(/[^a-z]/g,'');}
+function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+function W(str){return str.trim().split(/\s+/).map(function(t){return clean(t)?'<span class="w">'+t+'</span>':t;}).join(' ');}
+function plain(s){return s.replace(/[\[\]]/g,'');}
+function parts(s){return s.split(/\[|\]/);}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function stars(n){return '<span class="stars">'+'⭐'.repeat(n)+'☆'.repeat(3-n)+'</span>';}
+function total(){var t=0;for(var k in S.best)t+=S.best[k].p;return t;}
+function totalStars(){var t=0;for(var k in S.best)t+=S.best[k].s;return t;}
+function vars(t){return t==null?'--c:#0369a1;--bg:#e0f2fe':'--c:'+TYPES[t].c+';--bg:'+TYPES[t].bg;}
+
+/* ---------- เสียง ---------- */
+function speak(text,lang,rate,then){
+  if(!('speechSynthesis' in window))return;
+  try{
+    var u=new SpeechSynthesisUtterance(text);u.lang=lang;u.rate=rate||0.85;
+    var vs=speechSynthesis.getVoices(),p=lang.slice(0,2);
+    for(var i=0;i<vs.length;i++){if(vs[i].lang.replace('_','-').toLowerCase().indexOf(p)===0){u.voice=vs[i];break;}}
+    if(then)u.onend=then;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function stopTalk(){try{speechSynthesis.cancel();}catch(e){}}
+function thSay(m){return m.replace(/\(.*?\)/g,'').replace(/\.\.\./g,'').replace(/\//g,' หรือ ');}
+var ac;
+function beep(ok){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();var o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);g.gain.value=.07;o.frequency.value=ok?784:196;o.start();if(ok)o.frequency.setValueAtTime(1175,ac.currentTime+.12);o.stop(ac.currentTime+.3);}catch(e){}}
+
+/* ---------- แผ่นคำศัพท์ ---------- */
+function showWords(tokens,auto){
+  var h='<button class="x" data-act="close">✕</button>';
+  tokens.forEach(function(t){
+    var c=clean(t),d=D[c];if(!c)return;
+    var en=c==='i'?'I':c;
+    h+='<div class="row"><div class="en">'+en+'</div>'+
+      (d?'<div>คำอ่าน: <b>'+d[0]+'</b></div><div>แปลว่า: <b>'+d[1]+'</b></div>':'')+
+      '<button class="say" data-act="say" data-say="'+en+'" data-lang="en">🔊 ฟังเสียงอังกฤษ</button>'+
+      '<button class="say" data-act="say" data-say="'+en+'" data-lang="en" data-slow="1">🐢 ช้า ๆ</button>'+
+      (d?'<button class="say" data-act="say" data-say="'+esc(thSay(d[1]))+'" data-lang="th">🔊 ฟังคำแปลไทย</button>':'')+'</div>';
+  });
+  sheetIn.innerHTML=h;sheet.classList.add('on');
+  if(auto!==false){
+    stopTalk();
+    var cs=tokens.map(clean).filter(Boolean);
+    if(cs.length===1){var d=D[cs[0]];speak(cs[0]==='i'?'I':cs[0],'en-US',0.8,d?function(){speak(thSay(d[1]),'th-TH',0.9);}:null);}
+    else speak(cs.join(' '),'en-US',0.8);
+  }
+}
+function sayBtns(s){s=esc(plain(s));return '<div class="center"><button class="say" data-act="say" data-say="'+s+'" data-lang="en">🔊 ฟังทั้งประโยค</button><button class="say" data-act="say" data-say="'+s+'" data-lang="en" data-slow="1">🐢 ช้า ๆ</button></div>';}
+function pic(em){return '<div class="pic"><div class="box">'+em[0]+'<small>ถ้า (If)</small></div><span class="ar">➜</span><div class="box">'+em[1]+'<small>ผลที่ตามมา</small></div></div>';}
+function formula(t){var T=TYPES[t];
+  return '<div class="formula">'+T.f1.map(function(x,i){return '<span class="chip'+(i?' b':'')+'">'+x+'</span>';}).join('<span>+</span>')+
+   '<span class="comma">,</span>'+T.f2.map(function(x){return '<span class="chip b">'+x+'</span>';}).join('<span>+</span>')+'</div>';}
+function fullSent(s){var p=parts(s);if(p.length<3)return W(s);
+  var a=p[2],sp=/^[.,!?]/.test(a)?'':' ';
+  return W(p[0])+' <span class="hl">'+W(p[1])+'</span>'+sp+(a.trim().length>1?W(a):a);}
+function blankSent(s){var p=parts(s),a=p[2],sp=/^[.,!?]/.test(a)?'':' ';
+  return W(p[0])+' <span class="blank">&nbsp;?&nbsp;</span>'+sp+(a.trim().length>1?W(a):a);}
+
+/* ---------- หน้าแรก ---------- */
+function home(){
+  stopTalk();sheet.classList.remove('on');
+  var h='<div class="hero"><div class="isl">🏝️</div><h1>IF Island</h1><p>เกมฝึก If-Clause ครบทุก Type • แตะคำไหนก็ได้เพื่อฟังเสียงและดูคำแปล</p></div>'+
+   '<div class="bar"><input id="nm" placeholder="พิมพ์ชื่อ - เลขที่ ของนักเรียน" value="'+esc(S.name)+'"><span class="pill">🏅 '+total()+' คะแนน</span><span class="pill">⭐ '+totalStars()+'/27</span></div>';
+  TYPES.forEach(function(T,t){
+    var bv=S.best[t+'v'],bm=S.best[t+'m'];
+    h+='<div class="card" style="'+vars(t)+'"><h2>'+T.em+' '+T.n+' : '+T.th+'</h2>'+formula(t)+
+     '<div class="btns"><button class="btn lt" data-act="learn" data-t="'+t+'">📖 เรียนรู้<small>อ่านก่อนเล่น</small></button>'+
+     '<button class="btn" data-act="play" data-k="v" data-t="'+t+'">✏️ เติมคำ<small>'+(bv?stars(bv.s)+' '+bv.p:'ยังไม่ได้เล่น')+'</small></button>'+
+     '<button class="btn" data-act="play" data-k="m" data-t="'+t+'">🧩 จับคู่ประโยค<small>'+(bm?stars(bm.s)+' '+bm.p:'ยังไม่ได้เล่น')+'</small></button></div></div>';
+  });
+  var bb=S.best.boss;
+  h+='<div class="card" style="--c:#be123c;--bg:#ffe4e6"><h2>👑 ด่านบอส : Type ไหนกันนะ?</h2><div class="sub">รวมทุก Type 10 ข้อ อ่านประโยคแล้วบอกว่าเป็น Type อะไร</div>'+
+   '<div class="btns"><button class="btn" data-act="play" data-k="b">⚔️ สู้กับบอส<small>'+(bb?stars(bb.s)+' '+bb.p:'ยังไม่ได้เล่น')+'</small></button>'+
+   '<button class="btn lt" data-act="book">📒 สมุดคะแนน<small>ดูคะแนนทั้งหมด</small></button></div></div>'+
+   '<div class="panel"><b>สรุปสั้น ๆ 4 Type</b><table>'+TYPES.map(function(T){return '<tr><td style="color:'+T.c+';font-weight:700;white-space:nowrap">'+T.em+' '+T.n+'</td><td>'+T.th+'<br><small>'+T.f1.join(' + ')+' , '+T.f2.join(' + ')+'</small></td></tr>';}).join('')+
+   '</table><div class="tip">V1 = กริยาช่อง 1 (go) • V2 = กริยาช่อง 2 (went) • V3 = กริยาช่อง 3 (gone)</div></div>'+
+   '<div class="foot">คะแนนจะถูกบันทึกไว้ในเครื่องนี้โดยอัตโนมัติ</div>';
+  app.innerHTML=h;window.scrollTo(0,0);
+  document.getElementById('nm').oninput=function(){S.name=this.value;save();};
+}
+
+/* ---------- หน้าเรียนรู้ ---------- */
+function learn(t){
+  var T=TYPES[t];
+  var h='<div style="'+vars(t)+'"><div class="top"><button class="back" data-act="home">⬅ กลับ</button><b style="color:'+T.c+'">📖 '+T.n+'</b></div>'+
+   '<div class="panel"><div class="big">'+T.em+'</div><h2 class="center" style="color:'+T.c+'">'+T.n+' : '+T.th+'</h2>'+
+   '<div class="note">'+T.desc+'</div><div class="center"><b>สูตร</b></div>'+formula(t)+'<div class="tip">💡 '+T.key+'</div></div>';
+  T.ex.forEach(function(e,i){
+    h+='<div class="panel" style="margin-top:14px"><div class="q">ตัวอย่างที่ '+(i+1)+' (แตะที่คำเพื่อฟังเสียง)</div>'+pic(e.em)+
+     '<div class="sent">'+W(e.s)+'</div><div class="thai">'+e.th.join(' ')+'</div>'+sayBtns(e.s)+'</div>';
+  });
+  h+='<div class="btns" style="margin-top:16px"><button class="btn" data-act="play" data-k="v" data-t="'+t+'">✏️ ไปเล่นเกมเติมคำ</button><button class="btn" data-act="play" data-k="m" data-t="'+t+'">🧩 ไปเล่นเกมจับคู่</button></div></div>';
+  app.innerHTML=h;window.scrollTo(0,0);
+}
+
+/* ---------- เกม ---------- */
+var R=null;
+function play(k,t){
+  var qs=[];
+  if(k==='b'){
+    var all=[];Q.forEach(function(arr,ti){arr.forEach(function(q){all.push({q:q,t:ti});});});
+    qs=shuffle(all).slice(0,10);
+  }else qs=shuffle(Q[t].map(function(q,i){return {q:q,t:t,i:i};}));
+  R={k:k,t:k==='b'?null:t,qs:qs,n:0,p:0,ok:0,st:0,done:false};
+  ask();
+}
+function splitS(s){s=plain(s);var i=s.indexOf(', ');return [s.slice(0,i+1),s.slice(i+2)];}
+function ask(){
+  stopTalk();sheet.classList.remove('on');
+  var it=R.qs[R.n],q=it.q,T=TYPES[it.t],opts,body,title;
+  R.done=false;
+  if(R.k==='v'){
+    title='✏️ เติมคำ • '+T.n;
+    opts=shuffle([{l:parts(q.s)[1],ok:true}].concat(q.x.map(function(x){return {l:x};})));
+    body='<div class="q">เลือกคำที่ถูกต้องเติมในช่องว่าง</div>'+pic(q.em)+'<div class="sent">'+blankSent(q.s)+'</div><div class="thai">'+q.th.join(' ')+'</div>';
+  }else if(R.k==='m'){
+    title='🧩 จับคู่ประโยค • '+T.n;
+    var sp=splitS(q.s);
+    opts=shuffle([{l:sp[1],ok:true}].concat(q.m.map(function(j){return {l:splitS(Q[it.t][j].s)[1]};})));
+    body='<div class="q">เลือกส่วนท้ายที่มีความหมายเข้ากัน</div><div class="pic"><div class="box">'+q.em[0]+'<small>ถ้า (If)</small></div><span class="ar">➜</span><div class="box">❓<small>ผลที่ตามมา</small></div></div>'+
+      '<div class="sent">'+W(sp[0])+' <span class="blank">&nbsp;?&nbsp;</span></div><div class="thai">'+q.th[0]+' ...</div>';
+  }else{
+    title='👑 ด่านบอส';
+    opts=TYPES.map(function(X,i){return {l:X.n+' • '+X.th,ok:i===it.t,noHear:true};});
+    body='<div class="q">ประโยคนี้เป็น If-Clause Type ไหน?</div>'+pic(q.em)+'<div class="sent">'+W(plain(q.s))+'</div><div class="thai">'+q.th.join(' ')+'</div>'+sayBtns(q.s);
+  }
+  R.opts=opts;
+  var v=vars(R.t);
+  app.innerHTML='<div style="'+v+'"><div class="top"><button class="back" data-act="home">⬅ ออก</button><b>'+title+'</b><span class="pill">🏅 '+R.p+'</span></div>'+
+   '<div class="prog"><i style="width:'+(R.n/R.qs.length*100)+'%"></i></div>'+
+   '<div class="panel"><div class="center" style="color:#64748b">ข้อ '+(R.n+1)+' / '+R.qs.length+(R.st>=2?' • 🔥 ถูกติดกัน '+R.st+' ข้อ':'')+'</div>'+body+
+   '<div id="opts">'+opts.map(function(o,i){return '<div class="opt"><button class="o" data-act="ans" data-i="'+i+'">'+o.l+'</button>'+(o.noHear?'':'<button class="h" data-act="hear" data-i="'+i+'" title="ฟังเสียง">🔊</button>')+'</div>';}).join('')+'</div>'+
+   '<div id="fb"></div></div></div>';
+  window.scrollTo(0,0);
+}
+function answer(i){
+  if(R.done)return;R.done=true;
+  var it=R.qs[R.n],q=it.q,T=TYPES[it.t],o=R.opts[i],bs=document.querySelectorAll('#opts .o'),gain=0;
+  R.opts.forEach(function(x,j){if(x.ok)bs[j].classList.add('ok');});
+  if(o.ok){R.ok++;R.st++;gain=10+(R.st>=3?5:0);R.p+=gain;}else{bs[i].classList.add('no');R.st=0;}
+  beep(o.ok);
+  var last=R.n===R.qs.length-1;
+  document.getElementById('fb').innerHTML='<div class="fb '+(o.ok?'good':'bad')+'"><h3>'+(o.ok?'✅ ถูกต้อง! +'+gain+(gain>10?' (โบนัสถูกติดกัน 🔥)':''):'❌ ยังไม่ถูก ไม่เป็นไร ดูคำตอบด้านล่างนะ')+'</h3>'+
+    '<div class="sent">'+fullSent(q.s)+'</div><div class="thai">'+q.th.join(' ')+'</div>'+sayBtns(q.s)+
+    '<div class="tip" style="--c:'+T.c+'"><b style="color:'+T.c+'">'+T.n+' : '+T.th+'</b>'+formula(it.t)+T.key+'</div>'+
+    '<button class="btn" style="width:100%" data-act="next">'+(last?'🏁 ดูผลคะแนน':'ข้อต่อไป ▶')+'</button></div>';
+  document.getElementById('fb').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function finish(){
+  var n=R.qs.length,pct=R.ok/n,s=pct>=.9?3:pct>=.6?2:R.ok>0?1:0;
+  var key=R.k==='b'?'boss':R.t+R.k,old=S.best[key],isNew=!old||R.p>old.p;
+  if(isNew)S.best[key]={p:R.p,s:Math.max(s,old?old.s:0)};
+  else if(s>old.s)old.s=s;
+  save();
+  var msg=s===3?'สุดยอดไปเลย! 🎉':s===2?'เก่งมาก! อีกนิดเดียวได้ 3 ดาว':'พยายามได้ดี ลองอ่านหน้าเรียนรู้แล้วเล่นอีกครั้งนะ';
+  app.innerHTML='<div style="'+vars(R.t)+'"><div class="panel center"><div class="big">'+(s===3?'🏆':s===2?'🎖️':'💪')+'</div><h2>'+msg+'</h2>'+
+   '<div style="font-size:2.2rem">'+stars(s)+'</div><p>ตอบถูก <b>'+R.ok+' / '+n+'</b> ข้อ</p><p style="font-size:1.6rem;font-weight:800;color:var(--c)">🏅 '+R.p+' คะแนน</p>'+
+   (isNew?'<div class="tip">✨ คะแนนสูงสุดใหม่ของด่านนี้!</div>':'<div class="tip">คะแนนสูงสุดเดิม: '+old.p+'</div>')+
+   '<div class="btns" style="margin-top:12px"><button class="btn" data-act="play" data-k="'+R.k+'" data-t="'+R.t+'">🔁 เล่นอีกครั้ง</button><button class="btn lt" data-act="home">🏝️ กลับหน้าแรก</button></div></div></div>';
+  window.scrollTo(0,0);
+  if(s===3)confetti();
+}
+function confetti(){var e=['🎉','⭐','🌟','🎊','💛'];for(var i=0;i<26;i++){(function(i){var d=document.createElement('div');d.className='conf';d.textContent=e[i%e.length];d.style.left=Math.random()*100+'vw';d.style.animationDelay=Math.random()*.8+'s';document.body.appendChild(d);setTimeout(function(){d.remove();},3600);})(i);}}
+
+/* ---------- สมุดคะแนน ---------- */
+function book(){
+  var rows='',names={v:'✏️ เติมคำ',m:'🧩 จับคู่ประโยค'};
+  TYPES.forEach(function(T,t){['v','m'].forEach(function(k){var b=S.best[t+k];
+    rows+='<tr><td style="color:'+T.c+';font-weight:700">'+T.n+'</td><td>'+names[k]+'</td><td>'+(b?stars(b.s):'-')+'</td><td><b>'+(b?b.p:0)+'</b></td></tr>';});});
+  var b=S.best.boss;rows+='<tr><td style="color:#be123c;font-weight:700">บอส</td><td>👑 Type ไหนกันนะ?</td><td>'+(b?stars(b.s):'-')+'</td><td><b>'+(b?b.p:0)+'</b></td></tr>';
+  var d=new Date();
+  app.innerHTML='<div class="top"><button class="back" data-act="home">⬅ กลับ</button><b>📒 สมุดคะแนน</b></div><div class="panel"><p><b>ชื่อ:</b> '+(esc(S.name)||'(ยังไม่ได้พิมพ์ชื่อ)')+'</p><p><b>วันที่:</b> '+d.toLocaleDateString('th-TH')+'</p>'+
+   '<table><tr><th>Type</th><th>เกม</th><th>ดาว</th><th>คะแนน</th></tr>'+rows+'</table>'+
+   '<p class="center" style="font-size:1.5rem;font-weight:800;margin-top:12px">รวม 🏅 '+total()+' คะแนน • ⭐ '+totalStars()+'/27</p>'+
+   '<div class="tip">ถ่ายภาพหน้าจอ (แคปหน้าจอ) หน้านี้ส่งครูได้เลย</div>'+
+   '<div class="center"><button class="say" style="background:#fee2e2;color:#b91c1c" data-act="reset">🗑️ ล้างคะแนนทั้งหมด</button></div></div>';
+  window.scrollTo(0,0);
+}
+
+/* ---------- การแตะ ---------- */
+var ACT={
+  home:home,
+  learn:function(d){learn(+d.t);},
+  play:function(d){play(d.k,d.k==='b'?null:+d.t);},
+  ans:function(d){answer(+d.i);},
+  hear:function(d){showWords(R.opts[+d.i].l.split(/\s+/));},
+  next:function(){R.n++;if(R.n>=R.qs.length)finish();else ask();},
+  book:book,
+  close:function(){sheet.classList.remove('on');stopTalk();},
+  say:function(d){stopTalk();speak(d.say,d.lang==='th'?'th-TH':'en-US',d.slow?0.5:(d.lang==='th'?0.9:0.85));},
+  reset:function(d,el){if(el.dataset.sure){S.best={};save();book();}else{el.dataset.sure='1';el.textContent='⚠️ แตะอีกครั้งเพื่อยืนยันการล้างคะแนน';}}
+};
+document.addEventListener('click',function(e){
+  var w=e.target.closest('.w');
+  if(w){showWords([w.textContent]);return;}
+  var a=e.target.closest('[data-act]');
+  if(a){ACT[a.dataset.act](a.dataset,a);return;}
+  if(sheet.classList.contains('on')&&!e.target.closest('#sheet'))sheet.classList.remove('on');
+});
+if('speechSynthesis' in window){try{speechSynthesis.getVoices();}catch(e){}}
+home();
+</script>
+</body>
+</html>
